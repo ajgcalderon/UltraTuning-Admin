@@ -2,12 +2,12 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Package, PlusCircle, ExternalLink, LogOut, ShieldCheck, Database } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { isSupabaseConfigured } from '../lib/supabase';
+import { isSupabaseConfigured, STORE_URL } from '../lib/supabase';
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, signOut } = useAuth();
   const location = useLocation();
-  const storeUrl = import.meta.env.VITE_STORE_URL || 'https://ultratuning.ve';
+  const storeUrl = STORE_URL;
 
   const isProductsActive = location.pathname === '/' || location.pathname.startsWith('/products');
 

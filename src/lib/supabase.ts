@@ -3,13 +3,21 @@ import type { Product, ProductColor } from '../types/product';
 
 const supabaseUrl =
   import.meta.env.VITE_SUPABASE_URL ||
+  import.meta.env.SUPABASE_URL ||
   (import.meta.env as any).PUBLIC_SUPABASE_URL ||
   '';
 
 const supabaseAnonKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  import.meta.env.SUPABASE_ANON_KEY ||
   (import.meta.env as any).PUBLIC_SUPABASE_ANON_KEY ||
   '';
+
+export const STORE_URL =
+  import.meta.env.VITE_STORE_URL ||
+  import.meta.env.STORE_URL ||
+  (import.meta.env as any).PUBLIC_STORE_URL ||
+  'https://ultratuning.ve';
 
 export const isSupabaseConfigured = Boolean(
   supabaseUrl && 

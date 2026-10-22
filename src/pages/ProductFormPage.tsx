@@ -16,7 +16,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import type { Product, ProductColor } from '../types/product';
-import { fetchProductById, saveProduct, uploadProductImage } from '../lib/supabase';
+import { fetchProductById, saveProduct, uploadProductImage, STORE_URL } from '../lib/supabase';
 
 const CATEGORIES = [
   'Estética Exterior',
@@ -327,7 +327,7 @@ export const ProductFormPage: React.FC = () => {
 
         {isEdit && (
           <a
-            href={`${import.meta.env.VITE_STORE_URL || 'https://ultratuning.ve'}/producto/${sku}`}
+            href={`${STORE_URL}/producto/${sku}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-zinc-400 hover:text-amber-400 flex items-center gap-1.5 px-3 py-2 rounded-xl border border-zinc-800 hover:border-zinc-700 bg-zinc-900 transition-colors"

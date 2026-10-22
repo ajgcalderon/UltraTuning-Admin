@@ -17,7 +17,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import type { Product } from '../types/product';
-import { fetchProducts, updateProductQuickStatus, deleteProduct } from '../lib/supabase';
+import { fetchProducts, updateProductQuickStatus, deleteProduct, STORE_URL } from '../lib/supabase';
 
 export const ProductsListPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -31,7 +31,7 @@ export const ProductsListPage: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
-  const storeUrl = import.meta.env.VITE_STORE_URL || 'https://ultratuning.ve';
+  const storeUrl = STORE_URL;
 
   const loadData = async () => {
     setLoading(true);

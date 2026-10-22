@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Lock, Mail, AlertCircle, ArrowRight, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { isSupabaseConfigured } from '../lib/supabase';
+import { isSupabaseConfigured, STORE_URL } from '../lib/supabase';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -134,7 +134,7 @@ export const LoginPage: React.FC = () => {
 
         <div className="text-center mt-6">
           <a
-            href={import.meta.env.VITE_STORE_URL || 'https://ultratuning.ve'}
+            href={STORE_URL}
             className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors inline-flex items-center gap-1"
           >
             ← Volver a la Tienda UltraTuning
