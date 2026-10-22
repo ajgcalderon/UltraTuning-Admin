@@ -1,23 +1,49 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Product, ProductColor } from '../types/product';
 
-const supabaseUrl =
+function normalizeSupabaseUrl(rawUrl: string): string {
+  if (!rawUrl) return '';
+  let url = rawUrl.trim().replace(/^['"]|['"]$/g, '');
+  if (!url) return '';
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = `https://${url}`;
+  }
+  // Si se ingresó el host de Postgres (db.xyz.supabase.co), convertir a endpoint API de Supabase
+  url = url.replace('https://db.', 'https://');
+  try {
+    new URL(url);
+    return url;
+  } catch {
+    return '';
+  }
+}
+
+function cleanAnonKey(rawKey: string): string {
+  if (!rawKey) return '';
+  return rawKey.trim().replace(/^['"]|['"]$/g, '');
+}
+
+const rawUrl =
   import.meta.env.VITE_SUPABASE_URL ||
   import.meta.env.SUPABASE_URL ||
   (import.meta.env as any).PUBLIC_SUPABASE_URL ||
   '';
 
-const supabaseAnonKey =
+const rawKey =
   import.meta.env.VITE_SUPABASE_ANON_KEY ||
   import.meta.env.SUPABASE_ANON_KEY ||
   (import.meta.env as any).PUBLIC_SUPABASE_ANON_KEY ||
   '';
 
-export const STORE_URL =
+const supabaseUrl = normalizeSupabaseUrl(rawUrl);
+const supabaseAnonKey = cleanAnonKey(rawKey);
+
+export const STORE_URL = (
   import.meta.env.VITE_STORE_URL ||
   import.meta.env.STORE_URL ||
   (import.meta.env as any).PUBLIC_STORE_URL ||
-  'https://ultratuning.ve';
+  'https://ultratuning.ve'
+).trim().replace(/^['"]|['"]$/g, '');
 
 export const isSupabaseConfigured = Boolean(
   supabaseUrl && 
@@ -26,14 +52,22 @@ export const isSupabaseConfigured = Boolean(
   supabaseAnonKey !== 'your-anon-key'
 );
 
-export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-      },
-    })
-  : createClient('https://mock-supabase.local', 'mock-key');
+let clientInstance;
+try {
+  clientInstance = isSupabaseConfigured
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+      })
+    : createClient('https://mock-supabase.local', 'mock-key');
+} catch (err) {
+  console.error('Error inicializando cliente de Supabase:', err);
+  clientInstance = createClient('https://mock-supabase.local', 'mock-key');
+}
+
+export const supabase = clientInstance;
 
 /**
  * Sube una imagen al bucket product-images de Supabase Storage.
